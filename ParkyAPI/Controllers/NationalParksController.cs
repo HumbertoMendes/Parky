@@ -8,8 +8,11 @@ using System.Collections.Generic;
 
 namespace ParkyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/nationalparks")]
+    // When omitted, ApiVersion will be 1.0 as configured in Startup.cs
     [ApiController]
+    // [ApiExplorerSettings(GroupName = "ParkyNationalParkOpenAPISpec")]
     public class NationalParksController : Controller
     {
         private readonly INationalParkRepository _nationalParkRepository;
@@ -69,7 +72,13 @@ namespace ParkyAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            return CreatedAtRoute(nameof(GetNationalPark), new { id = model.Id }, model);
+            return CreatedAtRoute(
+                nameof(GetNationalPark),
+                new {
+                    version = HttpContext.GetRequestedApiVersion().ToString(), // version is required because there are endpoints with the same name across versioned controllers
+                    id = model.Id
+                },
+                model);
         }
 
         [HttpPatch("{id:int}", Name = nameof(UpdateNationalPark))]

@@ -8,8 +8,10 @@ using System.Collections.Generic;
 
 namespace ParkyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
+    // [ApiExplorerSettings(GroupName = "ParkyTrailsOpenAPISpec")]
     public class TrailsController : Controller
     {
         private readonly ITrailRepository _trailRepository;
