@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using ParkyAPI.Data;
 using ParkyAPI.Mapper;
 using ParkyAPI.Repository;
@@ -34,10 +35,28 @@ namespace ParkyAPI
                 Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            // Dependency Injection
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
 
+            // Mapping
             services.AddAutoMapper(typeof(Mappings));
 
+            // Swagger Configuration
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("ParkyOpenAPISpec",
+                    new OpenApiInfo()
+                    {
+                        Title = "Parky API",
+                        Version = "1",
+                        Description = "Udemy Park API",
+                        Contact = new OpenApiContact() {
+                            Email = "humberto.mendes@laiv.ly",
+                            Name = "Humberto Mendes"
+                        }
+                    }
+                );
+            });
             services.AddControllers();
         }
 
@@ -50,7 +69,12 @@ namespace ParkyAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky Api");
+                options.RoutePrefix = "";
+            });
             app.UseRouting();
 
             app.UseAuthorization();
