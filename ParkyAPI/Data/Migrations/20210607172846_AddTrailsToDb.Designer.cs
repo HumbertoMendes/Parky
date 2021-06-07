@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkyAPI.Data;
 
 namespace ParkyAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210607172846_AddTrailsToDb")]
+    partial class AddTrailsToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +67,7 @@ namespace ParkyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NationalParkId")
+                    b.Property<int?>("NationalParkId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -79,9 +81,7 @@ namespace ParkyAPI.Migrations
                 {
                     b.HasOne("ParkyAPI.Models.NationalPark", "NationalPark")
                         .WithMany()
-                        .HasForeignKey("NationalParkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NationalParkId");
 
                     b.Navigation("NationalPark");
                 });

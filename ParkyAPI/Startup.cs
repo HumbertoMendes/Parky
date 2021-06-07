@@ -37,6 +37,7 @@ namespace ParkyAPI
 
             // Dependency Injection
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
+            services.AddScoped<ITrailRepository, TrailRepository>();
 
             // Mapping
             services.AddAutoMapper(typeof(Mappings));
